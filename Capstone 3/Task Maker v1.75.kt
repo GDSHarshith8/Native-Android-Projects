@@ -43,6 +43,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -71,7 +72,7 @@ data class Task(val id:  Int , val title : String , val isDone : Boolean)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PU5() {
-    var selectedTab by remember { mutableIntStateOf(0) }
+    var selectedTab by remember { mutableIntStateOf(-1) }
 
     val tasks = remember { mutableStateListOf<Task>() }
 
@@ -86,6 +87,11 @@ fun PU5() {
 
     var nextId by rememberSaveable { mutableIntStateOf(1) }
 
+    LaunchedEffect(showDialog) {
+        if (!showDialog) {
+            selectedTab = -1
+        }
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -305,6 +311,11 @@ fun PU5() {
 
                                         newTaskText = ""
                                         showDialog = false
+
+                                        // Toggle selectedTab to force recomposition:
+                                        selectedTab = 0  // temporarily switch tab
+                                        selectedTab = -1 // switch back to all tasks
+
                                         scope.launch {
                                             val result = sbh.showSnackbar(
                                                 "Task added",
