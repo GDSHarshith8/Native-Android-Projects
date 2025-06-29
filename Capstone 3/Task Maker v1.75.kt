@@ -73,7 +73,7 @@ data class Task(val id:  Int , val title : String , val isDone : Boolean)
 fun PU5() {
     var selectedTab by remember { mutableIntStateOf(0) }
 
-    val tasks = rememberSaveable { mutableStateListOf<Task>() }
+    val tasks = remember { mutableStateListOf<Task>() }
 
     val sbh = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope() // to launch snackbar
