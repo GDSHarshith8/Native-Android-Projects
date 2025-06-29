@@ -87,12 +87,6 @@ fun PU5() {
 
     var nextId by rememberSaveable { mutableIntStateOf(1) }
 
-    LaunchedEffect(showDialog) {
-        if (!showDialog) {
-            selectedTab = -1
-        }
-    }
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(hostState = sbh) },
@@ -206,7 +200,7 @@ fun PU5() {
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             // if empty shows + msg in center else starts from top
-            verticalArrangement = if (filteredTasks.isEmpty()) Arrangement.Center else Arrangement.Top
+            verticalArrangement =Arrangement.Center
         ) {
             if (filteredTasks.isEmpty()) {
                 Text(
@@ -312,9 +306,7 @@ fun PU5() {
                                         newTaskText = ""
                                         showDialog = false
 
-                                        // Toggle selectedTab to force recomposition:
-                                        selectedTab = 0  // temporarily switch tab
-                                        selectedTab = -1 // switch back to all tasks
+                                        selectedTab = -1  // ✅ Immediately show all tasks
 
                                         scope.launch {
                                             val result = sbh.showSnackbar(
