@@ -6,9 +6,9 @@ Welcome to my portfolio of native Android projects! This repository serves as a 
 
 ## 📁 Repository Structure
 
-All projects are organized within a dedicated folder named **`Task Maker`**, which contains all capstone projects.
+All projects are organized within a dedicated folder named after the App's Name (eg *`Task Maker`*), which contains all capstone projects.
 
-Each project folder is named by its capstone number (e.g., `Capstone 1`, `Capstone 2`), and includes the following:
+Each App Name folder has Capstones named by its capstone number (e.g., `Capstone 1`, `Capstone 2`), and includes the following as its conetents:
 
 * **Source Code**: The primary `.kt` file containing the application's source code.
 * **App Demo**: A screen recording (`.webm` or `.mp4`) demonstrating the final application.
