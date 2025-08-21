@@ -1,24 +1,33 @@
-# Native-Android-Projects
+# Native Android Projects
 
-Welcome to **Native-Android-Projects**!
-
-This repository showcases my **weekly capstone projects** as I progress through learning **native Android development** using **Java**,**Kotlin**,**Jetpack Compose** and **Android Studio**.
+Welcome to my portfolio of native Android projects! This repository serves as a showcase of my work and a record of my learning journey. It features a series of capstone projects built with **Android Studio**, using modern Android development practices.
 
 ---
 
-## 📁 Project Structure
+## 📁 Repository Structure
 
-Each project is organized into its own folder, named by capstone number (e.g., `Capstone 1`, `Capstone 2`, etc.).
+All projects are organized within a dedicated folder named **`Task Maker`**, which contains all capstone projects.
 
-Inside each folder, you'll find:
+Each project folder is named by its capstone number (e.g., `Capstone 1`, `Capstone 2`), and includes the following:
 
-- ✅ The main source file: `AppName vX.Y.kt`
-- 🎥 A screen recording of the app demo: `AppName vX.Y.webm`
+* **Source Code**: The primary `.kt` file containing the application's source code.
+* **App Demo**: A screen recording (`.webm` or `.mp4`) demonstrating the final application.
+
+---
+
+## 🚀 Technologies Used
+
+* **Languages**: Kotlin
+* **UI Toolkit**: Jetpack Compose
+* **IDE**: Android Studio
 
 ---
 
-## 🚧 Work in Progress
+## 📈 A Continuous Journey
 
-This is a continuously evolving repository as I build and improve my Android development skills. Stay tuned for new projects every week!
+This is a continuously evolving repository that documents my progress as I expand my skills in native Android development. New projects will be added regularly.
 
 ---
+
+### **Connect with me:**
+* **GitHub**: [GDSHarshith8](https://github.com/GDSHarshith8)
