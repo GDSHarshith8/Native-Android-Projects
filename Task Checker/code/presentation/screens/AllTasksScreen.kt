@@ -3,14 +3,22 @@ package com.taskchecker.presentation.screens
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -36,18 +44,28 @@ import com.taskchecker.presentation.viewModels.DeleteTasksVM
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Label
 import androidx.compose.material.icons.automirrored.filled.ViewList
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.RemoveCircle
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.taskchecker.presentation.AddTaskRoute
+import com.taskchecker.presentation.HomeRoute
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AllTasksScreen(
+    navController : NavController,
     allTasksViewModel: AllTasksVM = hiltViewModel(),
     deleteTasksViewModel: DeleteTasksVM = hiltViewModel(),
-    padding: PaddingValues,
-    initialFilter: String = "All"
+    initialFilter: TaskFilter = TaskFilter.All,
+    selectedTheme: AppTheme,
+    onThemeChange: (AppTheme) -> Unit,
+    onShowOnboarding: () -> Unit
 ) {
     val tasksFromDb by allTasksViewModel.tasks.collectAsStateWithLifecycle(emptyList())
     val selectedFilter = rememberSaveable { mutableStateOf(initialFilter) }
@@ -64,6 +82,7 @@ fun AllTasksScreen(
 
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     LaunchedEffect(snackbarQueue) {
         // Collect tasks from the shared snackbar queue (1-by-1 in order of deletion)
@@ -107,41 +126,108 @@ fun AllTasksScreen(
         }
     }
 
-
     val filteredTasks = tasksFromDb
         .filter { it.id != remUndo.value?.id }
         .filter {
             when (selectedFilter.value) {
-                "Finished" -> it.isDone
-                "Unfinished" -> !it.isDone
-                "All" -> true
-                else -> true
+                TaskFilter.Finished -> it.isDone
+                TaskFilter.Unfinished -> !it.isDone
+                TaskFilter.All -> true
             }
         }
 
-    AllTSContent(
-        tasks = filteredTasks,
-        isTaskListEmpty = tasksFromDb.isEmpty(),
-        selectedFilter = selectedFilter.value,
-        onFilterSelected = { selectedFilter.value = it },
-        onToggleTaskDone = { allTasksViewModel.toggleTaskDone(it) },
-        onTaskDelete = { task ->
-            scope.launch {
-                snackbarQueue.emit(task)
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            HMcontent(
+                drawerState = drawerState,
+                selectedTheme = selectedTheme,
+                onThemeSelected = onThemeChange,
+                onShowOnboarding = onShowOnboarding
+            )
+        }
+    ) {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
+            topBar = {
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RectangleShape,
+                ) {
+                    TopAppBar(
+                        modifier = Modifier.statusBarsPadding(),
+                        title = {
+                            Text(
+                                text = "Task Checker",
+                                fontSize = 16.sp,
+                                letterSpacing = 2.sp,
+                                textAlign = TextAlign.Center,
+                                maxLines = 1,
+                                modifier = Modifier.clickable {
+                                    navController.navigate(HomeRoute.route) {
+                                        launchSingleTop = true
+                                        popUpTo(HomeRoute.route) { inclusive = true }
+                                    }
+                                }
+                            )
+                        },
+                        navigationIcon = {
+                            IconButton(
+                                onClick = { scope.launch { drawerState.open() } }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Menu,
+                                    contentDescription = "Menu"
+                                )
+                            }
+                        },
+                        colors = TopAppBarDefaults.topAppBarColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                            navigationIconContentColor = MaterialTheme.colorScheme.onPrimary
+                        )
+                    )
+                }
+            },
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = { navController.navigate(AddTaskRoute.route) },
+                    modifier = Modifier
+                        .navigationBarsPadding()
+                        .windowInsetsPadding(
+                            WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
+                        )
+                ) {
+                    Icon(Icons.Default.Add, contentDescription = "Add Task")
+                }
             }
-        },
-        padding = padding,
-        snackBarHostState = snackBarHostState,
-        listRefreshKey = listRefreshKey // Pass key down to force recomposition
-    )
+        ) { paddingValues ->
+            AllTSContent(
+                tasks = filteredTasks,
+                isTaskListEmpty = tasksFromDb.isEmpty(),
+                selectedFilter = selectedFilter.value,
+                onFilterSelected = { selectedFilter.value = it },
+                onToggleTaskDone = { allTasksViewModel.toggleTaskDone(it) },
+                onTaskDelete = { task ->
+                    scope.launch {
+                        snackbarQueue.emit(task)
+                    }
+                },
+                padding = paddingValues,
+                snackBarHostState = snackBarHostState,
+                listRefreshKey = listRefreshKey // Pass key down to force recomposition
+            )
+        }
+    }
 }
 
 @Composable
 fun AllTSContent(
     tasks: List<Task>,
     isTaskListEmpty: Boolean,
-    selectedFilter: String,
-    onFilterSelected: (String) -> Unit,
+    selectedFilter: TaskFilter,
+    onFilterSelected: (TaskFilter) -> Unit,
     onToggleTaskDone: (Task) -> Unit,
     onTaskDelete: (Task) -> Unit,
     padding: PaddingValues,
@@ -179,30 +265,26 @@ fun AllTSContent(
                 label = "taskContentCrossfade"
             ) { filter ->
                 when {
-                    // Show EmptyTaskSurface below filter if needed
                     isTaskListEmpty -> {
                         CenteredEmptyMessage("No tasks at the moment!\n\nUse + to add a task")
                     }
-
-                    tasks.isEmpty() && filter != "All" -> {
+                    tasks.isEmpty() && filter != TaskFilter.All -> {
                         val message = when (filter) {
-                            "Finished" -> "No completed tasks yet!\n\nComplete a task to see it here."
-                            "Unfinished" -> "You’re all caught up!\n\nNo unfinished tasks left."
+                            TaskFilter.Finished -> "No completed tasks yet!\n\nComplete a task to see it here."
+                            TaskFilter.Unfinished -> "You’re all caught up!\n\nNo unfinished tasks left."
                             else -> "No tasks"
                         }
                         CenteredEmptyMessage(message)
                     }
-
                     else -> {
-                        // Show tasks in a LazyColumn
                         TaskList(
                             tasks = tasks,
                             onToggleTaskDone = onToggleTaskDone,
                             onTaskDelete = onTaskDelete,
                             padding = innerPadding,
-                            listRefreshKey = listRefreshKey,// Pass key down to TaskList
-                            listState =  listState,
-                            selectedFilter = selectedFilter,
+                            listRefreshKey = listRefreshKey,
+                            listState = listState,
+                            selectedFilter = filter,
                             onFilterSelected = onFilterSelected
                         )
                     }
@@ -212,14 +294,21 @@ fun AllTSContent(
     }
 }
 
-private val FILTER_OPTIONS = listOf("All", "Finished", "Unfinished")
+enum class TaskFilter(val displayName: String) {
+    All("All"),
+    Finished("Finished"),
+    Unfinished("Unfinished")
+}
+
+private val FILTER_OPTIONS = TaskFilter.values().toList()
 
 @Composable
 fun FilterRow(
-    selectedFilter: String,
-    filterOptions: List<String>,
-    onFilterSelected: (String) -> Unit
-) {
+    selectedFilter: TaskFilter,
+    filterOptions: List<TaskFilter>,
+    onFilterSelected: (TaskFilter) -> Unit
+)
+ {
     Surface(
         tonalElevation = 3.dp,
         shape = RoundedCornerShape(10.dp),
@@ -239,21 +328,19 @@ fun FilterRow(
                     shape = RoundedCornerShape(10.dp),
                     modifier = Modifier.padding(horizontal = 4.dp),
                     onClick = { onFilterSelected(option) },
-                    label = { Text(option) },
+                    label ={ Text(option.displayName) },
                     selected = selectedFilter == option,
                     leadingIcon = {
                         Icon(
                             imageVector = when (option) {
-                                "All" -> Icons.AutoMirrored.Filled.ViewList
-                                "Finished" -> Icons.Default.CheckCircle
-                                "Unfinished" -> Icons.Default.RemoveCircle
-                                else -> Icons.AutoMirrored.Filled.Label
+                                TaskFilter.All -> Icons.AutoMirrored.Filled.ViewList
+                                TaskFilter.Finished -> Icons.Default.CheckCircle
+                                TaskFilter.Unfinished -> Icons.Default.RemoveCircle
                             },
                             contentDescription = when (option) {
-                                "All" -> "All tasks"
-                                "Finished" -> "Finished tasks"
-                                "Unfinished" -> "Unfinished tasks"
-                                else -> "Filter icon"
+                                TaskFilter.All -> "All tasks"
+                                TaskFilter.Finished -> "Finished tasks"
+                                TaskFilter.Unfinished -> "Unfinished tasks"
                             }
                         )
                     }
@@ -271,8 +358,8 @@ fun TaskList(
     padding: PaddingValues,
     listRefreshKey: Int, // ✅ Receive key to force recomposition
     listState: LazyListState,
-    selectedFilter: String,
-    onFilterSelected: (String) -> Unit
+    selectedFilter: TaskFilter,
+    onFilterSelected: (TaskFilter) -> Unit
 ) {
     val bottomOnlyPadding = PaddingValues(bottom = padding.calculateBottomPadding())
 
