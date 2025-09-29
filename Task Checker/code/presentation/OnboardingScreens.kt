@@ -1,24 +1,21 @@
 package com.taskchecker.presentation
 
-import androidx.compose.animation.*
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.isSpecified
-import androidx.compose.ui.unit.sp
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import kotlinx.coroutines.launch
 
 data class OnboardingPage(
     val title: String,
@@ -29,9 +26,11 @@ data class OnboardingPage(
 fun OnboardingScreen(
     onFinish: () -> Unit
 ) {
-    Surface( // <-- Add this wrapper
+    val cS = rememberCoroutineScope()
+
+    Surface(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background // <-- Respect current theme background
+        color = MaterialTheme.colorScheme.background
     ) {
         val pages = listOf(
             OnboardingPage(
@@ -48,70 +47,34 @@ fun OnboardingScreen(
             )
         )
 
-        var currentPage by remember { mutableStateOf(0) }
-
-        var finishOnboarding by remember { mutableStateOf(false) }
-
-        LaunchedEffect(finishOnboarding) {
-            if (finishOnboarding) {
-                onFinish()
-            }
-        }
+        val pagerState = rememberPagerState(pageCount = { pages.size })
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(24.dp)
-                .pointerInput(currentPage) {
-                    detectHorizontalDragGestures { change, dragAmount ->
-                        change.consume()
-
-                        if (dragAmount > 50) {
-                            if (currentPage > 0) {
-                                currentPage--
-                            }
-                        } else if (dragAmount < -50) {
-                            if (currentPage < pages.lastIndex) {
-                                currentPage++
-                            } else {
-                                finishOnboarding = true
-                            }
-                        }
-                    }
-                },
+                .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            val animationDuration = 300
-            val animationEasing = LinearOutSlowInEasing
-
-            AnimatedContent(
-                targetState = pages[currentPage],
-                transitionSpec = {
-                    (slideInHorizontally(
-                        animationSpec = tween(animationDuration, easing = animationEasing)
-                    ) + fadeIn(animationSpec = tween(animationDuration, easing = animationEasing)))
-                        .togetherWith(
-                            slideOutHorizontally(
-                                targetOffsetX = { -it },
-                                animationSpec = tween(animationDuration, easing = animationEasing)
-                            ) + fadeOut(animationSpec = tween(animationDuration, easing = animationEasing))
-                        )
-                },
-                label = "PageTransition"
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.weight(1f)
             ) { page ->
                 Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxWidth()
+                    verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = page.title,
+                        text = pages[page].title,
                         style = MaterialTheme.typography.headlineSmall,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(bottom = 12.dp)
                     )
                     Text(
-                        text = page.description,
+                        text = pages[page].description,
                         style = MaterialTheme.typography.bodyLarge.copy(
                             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f),
                         ),
@@ -123,13 +86,13 @@ fun OnboardingScreen(
 
             Spacer(modifier = Modifier.height(36.dp))
 
-            // Pagination Dots
+            // Animated Pagination Dots
             Row {
                 pages.forEachIndexed { index, _ ->
-                    val isSelected = index == currentPage
+                    val isSelected = index == pagerState.currentPage
                     val dotSize by animateDpAsState(
                         targetValue = if (isSelected) 12.dp else 8.dp,
-                        animationSpec = tween(animationDuration, easing = animationEasing),
+                        animationSpec = tween(300, easing = LinearOutSlowInEasing),
                         label = "DotSize"
                     )
                     val dotColor = if (isSelected) MaterialTheme.colorScheme.primary
@@ -144,19 +107,15 @@ fun OnboardingScreen(
                     )
                 }
             }
-        }
 
-        // Bottom Button
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(24.dp),
-            contentAlignment = Alignment.BottomCenter
-        ) {
+            Spacer(modifier = Modifier.height(24.dp))
+
             Button(
                 onClick = {
-                    if (currentPage < pages.lastIndex) {
-                        currentPage++
+                    if (pagerState.currentPage < pages.lastIndex) {
+                        cS.launch {
+                            pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                        }
                     } else {
                         onFinish()
                     }
@@ -167,7 +126,7 @@ fun OnboardingScreen(
                 shape = CircleShape
             ) {
                 Text(
-                    text = if (currentPage == pages.lastIndex) "Get Started" else "Next",
+                    text = if (pagerState.currentPage == pages.lastIndex) "Get Started" else "Next",
                     style = MaterialTheme.typography.labelLarge
                 )
             }
