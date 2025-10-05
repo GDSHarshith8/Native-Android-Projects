@@ -12,6 +12,7 @@ Each App Name folder has Capstones named by its capstone number (e.g., `Capstone
 
 * **Source Code**: The primary `.kt` file containing the application's source code.
 * **App Demo**: A screen recording (`.webm` or `.mp4`) demonstrating the final application.
+* **App APK**: The compiled Android application file (`.apk`) for direct installation.
 
 ---
 
