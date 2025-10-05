@@ -3,7 +3,7 @@
 ### Your Reading Journey, Uninterrupted.
 Meet **Literatrack**, the simplest way to track your reading journey. It's a lightweight, offline-first app designed for one thing: helping you read more. No distractions, no clutter—just your books.
 
-We believe reading should feel rewarding, not like a chore. That's why Literatrack puts you in control, giving you a beautiful, organized space to celebrate every finished page and discover your next great read.
+We believe reading should feel rewarding, not like a chore. That's why Literatrack puts you in control, giving you a beautiful, organized space to celebrate every finished book and discover your next great read.
 
 ---
 
