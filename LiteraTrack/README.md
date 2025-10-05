@@ -1,4 +1,4 @@
-# LiterTrack
+# LiteraTrack
 
 ### Your Reading Journey, Uninterrupted.
 Meet **Literatrack**, the simplest way to track your reading journey. It's a lightweight, offline-first app designed for one thing: helping you read more. No distractions, no clutter—just your books.
