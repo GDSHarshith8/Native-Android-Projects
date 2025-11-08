@@ -2,7 +2,7 @@
 
 > 🎧 A sleek Android music streaming player built with Jetpack Compose and Media3 ExoPlayer.  
 
-### Your Music Stream, Reimagined.  
+### Your Music Stream, Reimagined. 
 Meet **Music Streaming Player**, a modern Android music player built on a **search-first MVVM architecture** for fast track discovery and clean state management, delivering a seamless streaming experience.
 
 We believe listening should be effortless. Music Streaming Player puts you in control with robust playback controls and intelligent offline handling, ensuring your music never skips a beat.  
