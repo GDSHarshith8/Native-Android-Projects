@@ -1,0 +1,383 @@
+? Agile
+@ UI Basics [web Tech] 
+@ SQL Basics +  PLSQL
+@ Unix Basics
+
+* KARAT - Java:JVM, JDK,JRE, Reading & Displaying Values, Numeric, Operators, Variables, Datatypes, Access specifiers,Conditional Operations,Logical Operations, Java Packages, Java Memory Management
+* KARAT - Java:Iterations, String Manipulations, StringBuffer and StringBuider
+* KARAT - Java OOP -abstraction, encapsulation, constructors, getters and setters,
+* KARAT - Java:Arrays - Primitive , Non Primitive
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "FA1 on Jun 11"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+* KARAT - Generics
+	· Generic classes and methods
+	· Bounded type parameters
+	· Wildcards (extends, super)
+	. Type Erasure
+* KARAT - Java: Inheritance, Polymorphism, Abstract class, Interface, method overiding, overloading,
+* KARAT - Java: Exception Handling, Checked, unchecked Exception, try, catcxh, throw, throws & finally, Custom Exception
+* KARAT - Threads and Multithreading
+* KARAT - Java: Collections - List, ArrayList, Linked List, Vector, Stack , Hash Set, Linked Hash set, Tree set, Hash Map, Linked Hash Map, Tree Map, Queue, iteration, Comparable vs Comparator
+* KARAT - Java: Collections - Class Relationships- Association, Composition, One to one and one to many, Basic File I/O
+* KARAT - Java 8 Features - Functional Programming 
+	. Lambda expressions
+	· Functional interfaces
+	· Method Reference and Optional
+	· Stream API (filter, map, reduce)
+	· Parallel streams 
+* KARAT - Java : Junit testcases and Assertions
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "FA2 on June 26" <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+* Java : Database Connectivity Basics - Select & Update
+
+>>>>>>> "PRA1 Assessment (Simulating KARAT Assessment) June 29 to July 2" <<<<<<<<<<<<<<
+
+* Java Web: Apache Tomcat, MVC, Servlets Basics
+* Java Web: Servlets CRUD with MVC
+* Spring (DI,IOC) - KARAT
+*  Springboot & Microservices basics
+* API application CRUD with JDBC Get & Post Endpoints
+* Spring Cloud Basics & Deployment
+* Typescript basics
+* Angular Basics & Components
+* Angular - Forms
+* Angular Routing
+
+>>>>>>>>>>>>>>>> "PRA2 Assessment (Simulating KARAT Assessment) July 16" <<<<<<<<<<<<<<<<<<
+
+* ServiceNow Overview & Setup
+* ARE + SRE Basics
+* ITIL V4
+
+* Sonar Qube/PMD for Code Quality Checks
+* CSP Basics - Session by Faculty 
+* Devops Basics & Jenkins Session
+
+################################# "KARAT from Aug 3 - 13" #################################
+
+Java Memory Management, Object-Oriented Programming 	
+Threads, Multithreading	
+Collections, Generics	
+Interface, Abstract Class	
+Dependency Injection	
+Java 8	
+Stream API (basic to advance)	
+Exceptions	
+Junit - Assertions	
+
+
+all unix -
+
+
+UNIX
+Building Blocks
+
+--------------------------------------------------
+AGENDA
+--------------------------------------------------
+- Introduction to Operating System
+- Unix and Linux
+- Architecture of Unix
+- File Handling Commands
+- sort and uniq Command
+- grep Command
+- Pipelining
+- sed Command
+- cat Command
+- awk filter
+
+--------------------------------------------------
+OPERATING SYSTEM
+--------------------------------------------------
+- An Operating System (OS) is system software that manages computer hardware, software resources, and provides various services for computer programs.
+- It serves as a intermediate between the user, applications and the hardware of a computer.
+- The primary functions of OS include:
+  * Hardware Abstraction
+  * Process Management
+  * Memory Management
+  * File System Management
+  * Device Management
+  * Security and Access Control
+  * User Interface
+  * Networking
+- Common Examples: Microsoft Windows, Linux, macOS, iOS, Android
+
+--------------------------------------------------
+UNIX
+--------------------------------------------------
+Origins:
+- Unix is one of the earliest OS developed in the late 1970 at AT&T Bell Labs.
+Ownership:
+- Originally owned by AT&T.
+- Variants: Solaris (Sun), AIX (IBM), HP-UX (HP)
+Licensing:
+- Commercial and proprietary.
+- Led to open-source alternatives like Linux.
+User Base:
+- Enterprise systems (finance, telecom, academia)
+Standards:
+- Single UNIX Specification (SUS)
+
+--------------------------------------------------
+LINUX
+--------------------------------------------------
+Origins:
+- Developed by Linus Torvalds in early 1990s
+Ownership:
+- Open-source under GNU GPL
+Licensing:
+- Free to use, modify, distribute
+User Base:
+- Servers, cloud, IoT, PCs
+Variety:
+- Ubuntu, CentOS, Debian, Fedora
+
+--------------------------------------------------
+UNIX vs LINUX
+--------------------------------------------------
+Similarities:
+- Multi-user, multitasking
+- Similar command-line utilities
+- Shell scripting (Bash)
+Differences:
+- Unix: proprietary
+- Linux: open source
+- Linux has wider adoption
+
+--------------------------------------------------
+UNIX ARCHITECTURE
+--------------------------------------------------
+- Hardware (CPU, RAM, Storage)
+- Kernel:
+  * Core of OS
+  * Manages hardware, security, access
+- Shell:
+  * CLI interface for users
+
+--------------------------------------------------
+FILE HANDLING COMMANDS
+--------------------------------------------------
+Basic Commands:
+- mkdir, ls, pwd, cd, cp, mv, rmdir, rm
+Directory:
+- Folder containing files/directories
+File:
+- Stores information
+
+--------------------------------------------------
+LS COMMAND
+--------------------------------------------------
+- Lists directory contents
+- Syntax: ls [options] [filename]
+- Windows equivalent: dir
+
+Options:
+- -a : show all files including hidden
+- -A : exclude . and ..
+- -i : inode number
+- -r : reverse order
+- -R : recursive listing
+- -S : sort by size
+- -t : sort by modification time
+
+--------------------------------------------------
+MKDIR COMMAND
+--------------------------------------------------
+- Creates directories
+- Syntax: mkdir <dir_name>
+
+--------------------------------------------------
+PWD COMMAND
+--------------------------------------------------
+- Displays current directory path
+- Windows equivalent: cd
+
+--------------------------------------------------
+CD COMMAND
+--------------------------------------------------
+- Navigate directories
+- cd / → root
+- cd ~ → home
+- cd .. → parent
+- cd [name] → child directory
+
+--------------------------------------------------
+CP COMMAND
+--------------------------------------------------
+- Copy files/directories
+- Syntax: cp -r source destination
+- Windows equivalent: copy / xcopy
+
+--------------------------------------------------
+MV COMMAND
+--------------------------------------------------
+- Move or rename files
+
+--------------------------------------------------
+RMDIR COMMAND
+--------------------------------------------------
+- Remove directory
+- Windows: rmdir /s /q
+
+--------------------------------------------------
+RM COMMAND
+--------------------------------------------------
+- Delete files
+- Windows equivalent: del
+
+--------------------------------------------------
+FILTERS
+--------------------------------------------------
+Definition:
+- Program that takes input, processes it, outputs result
+
+Common Filters:
+- uniq → remove duplicates
+- head → first lines
+- tail → last lines
+- sort → sort lines
+- cut → extract fields
+- wc → word count
+- tr → translate characters
+- grep → search patterns
+
+--------------------------------------------------
+UNIQ COMMAND
+--------------------------------------------------
+- Removes duplicate lines
+Options:
+- -u → unique only
+- -d → duplicates only
+- -c → count occurrences
+
+--------------------------------------------------
+HEAD COMMAND
+--------------------------------------------------
+- Shows first lines
+Options:
+- -n N → first N lines
+- -c N → first N bytes
+
+--------------------------------------------------
+TAIL COMMAND
+--------------------------------------------------
+- Shows last lines
+Options:
+- -n N → last N lines
+- -f → follow updates
+
+--------------------------------------------------
+WC COMMAND
+--------------------------------------------------
+- Count metrics
+Options:
+- -l → lines
+- -w → words
+- -c → bytes
+- -L → longest line
+
+--------------------------------------------------
+SORT COMMAND
+--------------------------------------------------
+- Sort lines
+Options:
+- -k n → field
+- -t → delimiter
+- -n → numeric
+- -r → reverse
+- -m → merge
+
+--------------------------------------------------
+GREP COMMAND
+--------------------------------------------------
+- Search patterns in files
+- Syntax: grep pattern file
+
+--------------------------------------------------
+SED COMMAND
+--------------------------------------------------
+- Stream editor
+- Processes input line by line
+Steps:
+1. Read line
+2. Store in buffer
+3. Apply command
+4. Print output
+
+--------------------------------------------------
+CAT COMMAND
+--------------------------------------------------
+- Create/view/concatenate files
+Examples:
+- cat > file
+- cat file1 > file2
+- cat file1 file2 > file3
+- cat -n file → show line numbers
+- cat -e → show $ at line end
+
+--------------------------------------------------
+PIPELINING
+--------------------------------------------------
+- Connect commands using |
+- Output of one = input of another
+
+--------------------------------------------------
+AWK FILTER
+--------------------------------------------------
+- Text processing language
+- Syntax: awk 'pattern {action}' file
+
+Features:
+- Built-in variables
+- Functions
+- Regex
+- Control flow (if, loops)
+- Arrays
+- File handling
+
+BEGIN Block:
+- Executes before processing
+- Used for initialization
+
+END Block:
+- Executes after processing
+- Used for summaries
+
+--------------------------------------------------
+AWK VARIABLES
+--------------------------------------------------
+- FS : input field separator
+- OFS : output field separator
+- NF : number of fields
+- NR : number of records
+- RS : record separator
+- ORS : output separator
+
+--------------------------------------------------
+AWK FUNCTIONS
+--------------------------------------------------
+Arithmetic:
+- rand(), exp(x), int(x), log(x), sqrt(x), sin(x)
+
+String:
+- length(), substr(), index(), split(), gsub(), tolower(), toupper()
+
+--------------------------------------------------
+REGULAR EXPRESSIONS
+--------------------------------------------------
+- . → any character
+- ^ → start of line
+- $ → end of line
+- [] → character set
+- [^] → exclusion
+- | → alternation
+- * → zero or more
+- ? → zero or one
+- + → one or more
+- () → grouping
+
+--------------------------------------------------
+THANK YOU
+--------------------------------------------------
